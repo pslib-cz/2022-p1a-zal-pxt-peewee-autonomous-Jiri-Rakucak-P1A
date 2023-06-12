@@ -104,12 +104,12 @@ basic.forever(function on_forever() {
             //  když zaznamená pravý, prostřední i levý senzor (křižovatka) =>
             if (where == "left") {
                 //  zaboč doleva
-                motor_run(-199, 255)
+                motor_run(-199, 130)
                 basic.pause(50)
                 
             } else if (where == "right") {
                 //  zaboč doprava
-                motor_run(255, -130)
+                motor_run(199, -130)
                 basic.pause(50)
                 
             } else if (where == "forward") {
