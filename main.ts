@@ -25,10 +25,36 @@ function motor_run(left: number = 0, right: number = 0) {
 
 
 radio.onReceivedString(function(receivedString: string) {
-    if (receivedString === "forward") { where = "forward" }
-    if (receivedString === "left") { where = "left" }
-    if (receivedString === "right") { where = "right" }
-})
+    if (receivedString === "forward") { 
+        where = "forward" 
+        basic.showLeds(`
+    . . # . .
+    . # # # .
+    # . # . #
+    . . # . .
+    . . # . .
+    `)}
+    
+    if (receivedString === "left") { 
+        where = "left"
+        basic.showLeds(`
+    . . # . .
+    . # . . .
+    # # # # #
+    . # . . .
+    . . # . .
+    `) }
+    if (receivedString === "right") { 
+        where = "right"
+        basic.showLeds(`
+    . . # . .
+    . . . # .
+    # # # # #
+    . . . # .
+    . . # . .
+    `)
+    } }
+)
 
 basic.forever(function on_forever() {
 
@@ -47,25 +73,25 @@ basic.forever(function on_forever() {
                 basic.pause(400)
             } else {
                 //  => objet objekt 20x20x20 ...
-                motor_run(-160, 160)
-                basic.pause(100)
+                motor_run(199, -160)
+                basic.pause(50)
                 // doprava
-                motor_run(-160, -160)
-                basic.pause(380)
+                motor_run(199, 160)
+                basic.pause(150)
                 // rovně
-                motor_run(160, -160)
+                motor_run(-199, 160)
                 basic.pause(100)
                 // doleva
-                motor_run(-160, -160)
+                motor_run(199, 160)
                 basic.pause(750)
                 // rovně
-                motor_run(160, -160)
+                motor_run(-199, 140)
                 basic.pause(100)
                 // doleva
-                motor_run(-160, -160)
+                motor_run(199, 140)
                 basic.pause(380)
                 // rovně
-                motor_run(160, -160)
+                motor_run(199, 130)
                 basic.pause(100)
             }
 
@@ -73,34 +99,28 @@ basic.forever(function on_forever() {
             around = false
         } else if (!m && !l && !r) {
             // couvání, který nefunguje
-            motor_run(160, 160)
+            motor_run(-199, -130)
         } else if (r && l && m) {
             //  když zaznamená pravý, prostřední i levý senzor (křižovatka) =>
             if (where == "left") {
                 //  zaboč doleva
-                motor_run(-160, -160)
-                basic.pause(75)
-                motor_run(160, -160)
-                basic.pause(200)
-                PCAmotor.MotorStopAll()
-                basic.pause(150)
+                motor_run(-199, 255)
+                basic.pause(50)
+                
             } else if (where == "right") {
                 //  zaboč doprava
-                motor_run(-160, -160)
-                basic.pause(75)
-                motor_run(-160, 160)
-                basic.pause(200)
-                PCAmotor.MotorStopAll()
-                basic.pause(150)
+                motor_run(255, -130)
+                basic.pause(50)
+                
             } else if (where == "forward") {
                 //  neodbočuj
-                motor_run(-160, -160)
+                motor_run(199, 160)
             }
 
             where = "forward"
         } else if (!r && !l && m) {
             // když snímá jenom prostřední senzor => jeď rovně
-            motor_run(199, 130)
+            motor_run(199, 170)
         } else if (l && m) {
             //  když levý a prostřední senzor snímá čáru => zaboč doleva
             motor_run(100, -100)
