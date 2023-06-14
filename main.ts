@@ -19,8 +19,8 @@ let speed = 160
 let around = false
 //  Funkce na zlehčení použití motorů
 function motor_run(left: number = 0, right: number = 0) {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, Math.map(Math.constrain(-1 * left * (speedFactor / 100), -100, 100), -100, 100, -199, 199))
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, Math.map(Math.constrain(-1 * right * (speedFactor / 100), -100, 100), -100, 100, -130, 130))
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, Math.map(Math.constrain(-1 * left * (speedFactor / 100), -100, 100), -100, 100, -200, 200))
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, Math.map(Math.constrain(-1 * right * (speedFactor / 100), -100, 100), -100, 100, -255, 230))
 }
 
 
@@ -67,66 +67,87 @@ basic.forever(function on_forever() {
         // jízda na senzory
         if (obstacle_distance <= 15 && obstacle_distance != 0) {
             //  když sonar zaznamená méně než 15 cm
-            if (!around) {
-                //  => otoč se
-                motor_run(160, -160)
-                basic.pause(400)
-            } else {
+            PCAmotor.Servospeed(PCAmotor.Servos.S1, 0, 90, 1)
+            basic.pause(100)
+            if (obstacle_distance <= 15 && obstacle_distance != 0){
                 //  => objet objekt 20x20x20 ...
-                motor_run(199, -160)
+                motor_run(199, -130)
                 basic.pause(50)
                 // doprava
-                motor_run(199, 160)
+                motor_run(199, 130)
                 basic.pause(150)
                 // rovně
-                motor_run(-199, 160)
+                motor_run(-199, 130)
                 basic.pause(100)
                 // doleva
-                motor_run(199, 160)
+                motor_run(199, 130)
                 basic.pause(750)
                 // rovně
-                motor_run(-199, 140)
+                motor_run(-199, 130)
                 basic.pause(100)
                 // doleva
-                motor_run(199, 140)
+                motor_run(199, 130)
                 basic.pause(380)
                 // rovně
                 motor_run(199, 130)
                 basic.pause(100)
             }
+            else{
+                motor_run(-200, 130)
+                basic.pause(50)
+                // doprava
+                motor_run(200, 130)
+                basic.pause(150)
+                // rovně
+                motor_run(200, -130)
+                basic.pause(100)
+                // doleva
+                motor_run(200, 130)
+                basic.pause(750)
+                // rovně
+                motor_run(200, -130)
+                basic.pause(100)
+                // doleva
+                motor_run(200, 130)
+                basic.pause(380)
+                // rovně
+                motor_run(200, 130)
+                basic.pause(100)
+
+            }
 
             // doleva
             around = false
         } else if (!m && !l && !r) {
-            // couvání, který nefunguje
-            motor_run(-199, -130)
+            // couvání
+            motor_run(-200 -160)
         } else if (r && l && m) {
             //  když zaznamená pravý, prostřední i levý senzor (křižovatka) =>
             if (where == "left") {
                 //  zaboč doleva
-                motor_run(-199, 130)
-                basic.pause(50)
+                motor_run(0, 160)
+                basic.pause(1000)
                 
             } else if (where == "right") {
                 //  zaboč doprava
-                motor_run(199, -130)
-                basic.pause(50)
+                motor_run(200, 0)
+                basic.pause(1000)
                 
             } else if (where == "forward") {
                 //  neodbočuj
-                motor_run(199, 160)
+                motor_run(200, 160)
             }
 
             where = "forward"
         } else if (!r && !l && m) {
             // když snímá jenom prostřední senzor => jeď rovně
-            motor_run(199, 170)
+            motor_run(200, 230)
         } else if (l && m) {
             //  když levý a prostřední senzor snímá čáru => zaboč doleva
-            motor_run(100, -100)
+            motor_run(100, 0)
         } else if (r && m) {
             //  když pravý a prostřední senzor snímá čáru => zaboč doprava
-            motor_run(-100, 100)
+            motor_run(0, 100)
         }
 
     }
