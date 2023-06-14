@@ -12,7 +12,7 @@ let connected = 0
 pins.setPull(pin_L, PinPullMode.PullNone)
 pins.setPull(pin_R, PinPullMode.PullNone)
 pins.setPull(pin_M, PinPullMode.PullNone)
-let where = "forward"
+let where = 0
 let manual = false
 let line_follower = true
 let speed = 160
@@ -26,7 +26,7 @@ function motor_run(left: number = 0, right: number = 0) {
 
 radio.onReceivedString(function(receivedString: string) {
     if (receivedString === "forward") { 
-        where = "forward" 
+        where = 1
         basic.showLeds(`
     . . # . .
     . # # # .
@@ -36,7 +36,7 @@ radio.onReceivedString(function(receivedString: string) {
     `)}
     
     if (receivedString === "left") { 
-        where = "left"
+        where = 0
         basic.showLeds(`
     . . # . .
     . # . . .
@@ -45,7 +45,7 @@ radio.onReceivedString(function(receivedString: string) {
     . . # . .
     `) }
     if (receivedString === "right") { 
-        where = "right"
+        where = 2
         basic.showLeds(`
     . . # . .
     . . . # .
@@ -123,22 +123,21 @@ basic.forever(function on_forever() {
             motor_run(-200 -160)
         } else if (r && l && m) {
             //  když zaznamená pravý, prostřední i levý senzor (křižovatka) =>
-            if (where == "left") {
+            if (where === 0) {
                 //  zaboč doleva
                 motor_run(0, 160)
                 basic.pause(1000)
                 
-            } else if (where == "right") {
+            } else if (where === 2) {
                 //  zaboč doprava
                 motor_run(200, 0)
                 basic.pause(1000)
                 
-            } else if (where == "forward") {
+            } else if (where === 1) {
                 //  neodbočuj
                 motor_run(200, 160)
             }
-
-            where = "forward"
+            where = 1
         } else if (!r && !l && m) {
             // když snímá jenom prostřední senzor => jeď rovně
             motor_run(200, 230)
