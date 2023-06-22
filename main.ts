@@ -118,4 +118,5 @@ if (line_follower) {
             motor_run(0, speedR)
         }
     }
+    basic.pause(100)
 })
