@@ -18,8 +18,8 @@ let speed = 160
 let speedL = 155
 let speedR = 155
 function motor_run(left: number = 0, right: number = 0) {
-    PCAmotor.MotorRun(PCAmotor.Motors.M1, Math.map(Math.constrain(-1 * left * (speedFactor / 100), -100, 100), -100, 100, -speedL, speedL))
-    PCAmotor.MotorRun(PCAmotor.Motors.M4, Math.map(Math.constrain(-1 * right * (speedFactor / 100), -100, 100), -100, 100, -speedR, speedR))
+    PCAmotor.MotorRun(PCAmotor.Motors.M1, left)
+    PCAmotor.MotorRun(PCAmotor.Motors.M4, right)
 }
 
 
